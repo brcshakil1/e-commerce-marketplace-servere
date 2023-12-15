@@ -43,7 +43,7 @@ async function run() {
       const isExist = await usersCollections.findOne(query);
 
       // If the user is already created an account then return his previous data
-      if (isExist) return res.send(isExist);
+      if (isExist) res.send(isExist);
 
       // if user is new then create a new data
       const result = await usersCollections.updateOne(
