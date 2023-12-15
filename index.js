@@ -27,6 +27,35 @@ async function run() {
   try {
     // Connect the client to the server	(optional starting in v4.7)
     await client.connect();
+
+    // all collections
+    const usersCollections = client.db("unityDB").collection("users");
+
+    // users
+    app.put("/api/auth/register/:email", async (req, res) => {
+      const email = req.params.email;
+      const user = req.body;
+      console.log(email, user);
+      const query = { email: email };
+      const options = { upsert: true };
+
+      //   checking is user already exist
+      const isExist = await usersCollections.findOne(query);
+
+      // If the user is already created an account then return his previous data
+      if (isExist) return res.send(isExist);
+
+      // if user is new then create a new data
+      const result = await usersCollections.updateOne(
+        query,
+        {
+          $set: { ...user, timeStamp: Date.now() },
+        },
+        options
+      );
+      res.send(result);
+    });
+
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
     console.log(
