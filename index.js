@@ -84,7 +84,6 @@ async function run() {
 
     app.get("/api/buyer/seller-catalog/:seller_id", async (req, res) => {
       const id = req.params.seller_id;
-      console.log(id);
       const query = { sellerId: id };
       const result = await catalogsCollection.findOne(query);
       res.send(result);
